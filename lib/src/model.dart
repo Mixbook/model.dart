@@ -15,6 +15,8 @@ abstract class ModelFactory<M> {
   Future<List<M>> collection([Params params]) {
     return storage.collection(params);
   }
+
+  bool matches(Type modelType);
 }
 
 abstract class Model {

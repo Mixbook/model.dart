@@ -14,6 +14,8 @@ class PostFactory extends ModelFactory {
       return new Post(storage, params);
     });
   }
+
+  bool matches(Model m) => m == Post;
 }
 
 class Post extends Model {
@@ -21,7 +23,9 @@ class Post extends Model {
 }
 
 main() {
-  new PostFactory().find(123).then((post) {
+  var models = new Models();
+  models.register(new PostFactory());
+  models.get(Post).find(123).then((post) {
     // Do whatever you want with 'post'
   });
 }
