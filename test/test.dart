@@ -14,13 +14,13 @@ part 'storage/local_test.dart';
 part 'storage/restful_test.dart';
 part 'request_test.dart';
 part 'map_dirty_test.dart';
-part 'models_test.dart';
 
 void main() {
   localStorageTest();
   restfulStorageTest();
   requestTest();
   mapDirtyTest();
-  modelsTest();
   // TODO: Model's tests
+  // TODO: Model's factory tests
+  // TODO: Model's association tests
 }

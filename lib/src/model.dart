@@ -2,22 +2,9 @@ library model.model;
 
 import 'dart:async';
 import 'package:model/src/params.dart';
-import 'package:model/src/map_dirty.dart';
+import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
-
-abstract class ModelFactory<M> {
-  Storage storage;
-
-  Future<M> find(id) {
-    return storage.find(id);
-  }
-
-  Future<List<M>> collection([Params params]) {
-    return storage.collection(params);
-  }
-
-  bool matches(Type modelType);
-}
+import 'package:model/src/map_dirty.dart';
 
 abstract class Model {
   MapDirty attributes;
