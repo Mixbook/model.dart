@@ -86,5 +86,21 @@ main() {
       // Do whatever you want with 'comment'
     });
   });
+
+  // Or you could do:
+  Post.fact.find(123).then((post) {
+    post.comments[0].isLoaded // => false
+    post.comments[0].load().then((result) {
+      post.comments[0].isLoaded // => true
+      post.comments[0].attributes // => {"id": 213, "name": "blabla", ...}
+    });
+  });
+
+  // Or you can load all of them:
+  Post.fact.find(123).then((post) {
+    post.comments.load().then((result) {
+      post.comments[0].isLoaded // => true
+    });
+  });
 }
 ```

@@ -36,8 +36,8 @@ void restfulStorageTest() {
         return {"data": {"id": "123", "name": "Big one"}};
       }));
       storage.find(123).then(expectAsync1((obj) {
-        expect(obj.id, equals("123"));
-        expect(obj.name, equals("Big one"));
+        expect(obj["id"], equals("123"));
+        expect(obj["name"], equals("Big one"));
       }));
     });
 
@@ -47,10 +47,10 @@ void restfulStorageTest() {
         return {"data": [{"id": "1", "name": "One"}, {"id": "2", "name": "Two"}]};
       }));
       storage.collection().then(expectAsync1((objects) {
-        expect(objects[0].id, equals("1"));
-        expect(objects[0].name, equals("One"));
-        expect(objects[1].id, equals("2"));
-        expect(objects[1].name, equals("Two"));
+        expect(objects[0]["id"], equals("1"));
+        expect(objects[0]["name"], equals("One"));
+        expect(objects[1]["id"], equals("2"));
+        expect(objects[1]["name"], equals("Two"));
       }));
     });
 

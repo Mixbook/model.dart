@@ -6,6 +6,7 @@ part of model.storage;
 //  * Fallback to local storage
 //  * #collection() needs to return some collection class, which is aware of
 //    pagination
+//  * add class-level (factory-level?) caching of retrieved objects
 
 class RestfulStorage<E> implements AsyncStorage<E> {
   Function instantiator;
@@ -25,12 +26,12 @@ class RestfulStorage<E> implements AsyncStorage<E> {
 
   Future<E> find(int id, [Params params]) {
     var future = request.get(_buildUri("member", id), params);
-    return future.then((response) => instantiator(response["data"]));
+    return future.then((response) => response["data"]);
   }
 
   Future<List<E>> collection([Params params]) {
     var future = request.get(_buildUri("collection"), params);
-    return future.then((response) => response["data"].map((e) => instantiator(e)).toList());
+    return future.then((response) => response["data"]);
   }
 
   Future<Params> save(E object) {

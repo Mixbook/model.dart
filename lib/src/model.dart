@@ -8,30 +8,51 @@ import 'package:model/src/map_dirty.dart';
 
 abstract class Model {
   MapDirty attributes;
-  Storage storage;
-  bool isInstantiated = false;
+  Future<Model> _loadFuture;
+  Storage _storage;
+  bool isLoaded = false;
+  bool isLoading = false;
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => attributes["id"] == null ? null : int.parse(attributes["id"].toString());
   Timer autosaveTimer;
 
   Model(Storage storage, [Params params]) {
-    this.storage = storage;
+    this._storage = storage;
     if (params != null) {
       attributes = new MapDirty.from(params);
     }
+    if (_isParamsForLoaded(params)) {
+      isLoaded = true;
+      _loadFuture = new Future<bool>(() => true);
+    } else {
+      isLoaded = false;
+    };
+  }
+
+  Future<bool> load() {
+    if (!isLoaded && !isLoading) {
+      isLoading = true;
+      _loadFuture = _storage.find(attributes["id"]).then((params) {
+        attributes.addAll(params);
+        isLoaded = true;
+        isLoading = false;
+        return true;
+      });
+    }
+    return _loadFuture;
   }
 
   Future<bool> save() {
-    return storage.save(this).then((params) {
+    return _storage.save(this).then((params) {
       attributes = new MapDirty.from(params);
-      return params["errors"] != null || params["errors"].isEmpty;
+      return params["errors"] == null || params["errors"].isEmpty;
     });
   }
 
   Future<bool> delete() {
-    return storage.delete(this).then((params) {
-      return params["errors"] != null || params["errors"].isEmpty;
+    return _storage.delete(this).then((params) {
+      return params["errors"] == null || params["errors"].isEmpty;
     });
   }
 
@@ -56,6 +77,10 @@ abstract class Model {
     } else {
       return new Map.from(attributes);
     }
+  }
+
+  void _isParamsForLoaded(Params params) {
+    return !(params.length == 1 && params.keys.toList()[0] == "id");
   }
 
   void _autosave(Duration duration) {
