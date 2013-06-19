@@ -44,7 +44,7 @@ void restfulStorageTest() {
       requestMock.when(callsTo('get', uri, null)).alwaysReturn(new Future(() {
         return {"data": [{"id": "1", "name": "One"}, {"id": "2", "name": "Two"}]};
       }));
-      storage.collection().then(expectAsync1((objects) {
+      storage.findAll().then(expectAsync1((objects) {
         expect(objects[0]["id"], equals("1"));
         expect(objects[0]["name"], equals("One"));
         expect(objects[1]["id"], equals("2"));

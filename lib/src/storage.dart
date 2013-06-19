@@ -21,7 +21,7 @@ abstract class SyncStorage<E> extends Storage<E> {
 
 abstract class AsyncStorage<E> extends Storage<E> {
   Future<E> find(int id, [Params params]);
-  Future<List<E>> collection([Params params]);
+  Future<List<E>> findAll([Params params]);
   Future<Params> save(E object);
   Future<Params> delete(E object);
 }

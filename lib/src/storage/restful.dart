@@ -4,7 +4,7 @@ part of model.storage;
 //  * Error handling
 //  * Repeating requests if server doesn't respond
 //  * Fallback to local storage
-//  * #collection() needs to return some collection class, which is aware of
+//  * #findAll() needs to return some collection class, which is aware of
 //    pagination
 //  * add class-level (factory-level?) caching of retrieved objects
 
@@ -20,7 +20,7 @@ class RestfulStorage<E> implements AsyncStorage<E> {
     return future.then((response) => response["data"]);
   }
 
-  Future<List<E>> collection([Params params]) {
+  Future<List<E>> findAll([Params params]) {
     var future = request.get(_buildUri("collection"), params);
     return future.then((response) => response["data"]);
   }

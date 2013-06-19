@@ -11,8 +11,8 @@ abstract class ModelConnector<M> {
     return storage.find(id).then(buildModel);
   }
 
-  Future<List<M>> collection([Params params]) {
-    return storage.collection(params).then((paramsList) => paramsList.map(buildModel));
+  Future<List<M>> findAll([Params params]) {
+    return storage.findAll(params).then((paramsList) => paramsList.map(buildModel));
   }
 
   M buildModel(Params params);

@@ -8,12 +8,12 @@ import 'package:model/src/changeable_uri.dart';
 import 'package:model/src/http_request_mock.dart';
 
 class Request {
-  String host;
-  int port;
-  String scheme;
-  String pathPrefix;
+  String _host;
+  int _port;
+  String _scheme;
+  String _pathPrefix;
 
-  Request(this.host, this.port, this.scheme, this.pathPrefix);
+  Request(this._host, this._port, this._scheme, this._pathPrefix);
 
   Future<Params> get(ChangeableUri uri, [Params params]) {
     if (params != null) {
@@ -41,10 +41,10 @@ class Request {
 
 
   void _adjustUri(uri) {
-    uri.host = host;
-    uri.port = port;
-    uri.scheme = scheme;
-    uri.path = pathPrefix.replaceFirst(new RegExp(r'^/'), "") + uri.path;
+    uri.host = _host;
+    uri.port = _port;
+    uri.scheme = _scheme;
+    uri.path = _pathPrefix.replaceFirst(new RegExp(r'^/'), "") + uri.path;
   }
 
   Future<Params> _request(ChangeableUri uri, String method, [Params sendData]) {

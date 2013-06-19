@@ -8,14 +8,15 @@ import 'package:model/src/map_dirty.dart';
 
 abstract class Model {
   MapDirty attributes;
-  Future<Model> _loadFuture;
-  Storage _storage;
   bool isLoaded = false;
-  bool isLoading = false;
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => attributes["id"] == null ? null : int.parse(attributes["id"].toString());
-  Timer autosaveTimer;
+
+  bool _isLoading = false;
+  Future<Model> _loadFuture;
+  Storage _storage;
+  Timer _autosaveTimer;
 
   Model(Storage storage, [Params params]) {
     this._storage = storage;
@@ -31,12 +32,12 @@ abstract class Model {
   }
 
   Future<bool> load() {
-    if (!isLoaded && !isLoading) {
-      isLoading = true;
+    if (!isLoaded && !_isLoading) {
+      _isLoading = true;
       _loadFuture = _storage.find(attributes["id"]).then((params) {
         attributes.addAll(params);
         isLoaded = true;
-        isLoading = false;
+        _isLoading = false;
         return true;
       });
     }
@@ -65,9 +66,9 @@ abstract class Model {
 
   void stopAutosave() {
     isAutosaveEnabled = false;
-    if (autosaveTimer != null) {
-      autosaveTimer.cancel();
-      autosaveTimer = null;
+    if (_autosaveTimer != null) {
+      _autosaveTimer.cancel();
+      _autosaveTimer = null;
     }
   }
 
@@ -85,7 +86,7 @@ abstract class Model {
 
   void _autosave(Duration duration) {
     if (isAutosaveEnabled) {
-      autosaveTimer = new Timer(duration, () {
+      _autosaveTimer = new Timer(duration, () {
         save().then(() => _autosave(duration));
       });
     }

@@ -8,12 +8,12 @@ import 'dart:collection';
 
 abstract class ModelAssociation<E> extends ListBase<E> {
   final Model parent;
-  List<E> items = [];
+  List<E> _items = [];
   ModelConnector _connector;
 
   ModelAssociation(this.parent, List<Params> paramsList) {
     paramsList.forEach((params) {
-      items.add(connector.buildModel(params));
+      _items.add(connector.buildModel(params));
     });
   }
 
@@ -29,20 +29,20 @@ abstract class ModelAssociation<E> extends ListBase<E> {
   }
 
   Future<List<E>> load() {
-    var futures = items.map((i) => i.load());
+    var futures = _items.map((i) => i.load());
     return Future.wait(futures).then((results) => !results.any((e) => !e));
   }
 
   void forEach(void f(E element)) {
-    load().then((_) => items.forEach(f));
+    load().then((_) => _items.forEach(f));
   }
 
   ModelConnector buildConnector();
 
   // List extension methods - START
-  int get length => items.length;
-  void set length(int length) => items.length = length;
-  void operator[]=(int index, E value) => items[index] = value;
-  E operator [](int index) => items[index];
+  int get length => _items.length;
+  void set length(int length) => _items.length = length;
+  void operator[]=(int index, E value) => _items[index] = value;
+  E operator [](int index) => _items[index];
   // List extension methods - END
 }
