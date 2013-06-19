@@ -8,8 +8,8 @@ import 'package:unittest/mock.dart';
 import 'package:unittest/html_config.dart';
 
 import 'package:model/model.dart';
-import 'package:model/src/http_request_mock.dart';
 
+import 'http_request_mock.dart';
 part 'storage/local_test.dart';
 part 'storage/restful_test.dart';
 part 'request_test.dart';

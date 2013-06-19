@@ -15,12 +15,12 @@ class RestfulStorage implements AsyncStorage<Model> {
 
   RestfulStorage(this.request, this.resourceName, this.resourceCollectionName);
 
-  Future<Model> find(int id, [Params params]) {
+  Future<Params> find(int id, [Params params]) {
     var future = request.get(_buildUri("member", id), params);
     return future.then((response) => response["data"]);
   }
 
-  Future<List<Model>> findAll([Params params]) {
+  Future<List<Params>> findAll([Params params]) {
     var future = request.get(_buildUri("collection"), params);
     return future.then((response) => response["data"]);
   }
