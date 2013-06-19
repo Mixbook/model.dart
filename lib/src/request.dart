@@ -3,6 +3,7 @@ library model.request;
 import 'dart:json' as json;
 import 'dart:html';
 import 'dart:async';
+import 'dart:collection';
 import 'package:model/src/params.dart';
 import 'package:model/src/changeable_uri.dart';
 import 'package:model/src/http_request_mock.dart';
@@ -27,7 +28,7 @@ class Request {
   }
 
   Future<Params> put(ChangeableUri uri, Params params) {
-    var data = new Map.from(params)..addAll({"_method": "PUT"});
+    var data = new HashMap.from(params)..addAll({"_method": "PUT"});
     return _request(uri, "PUT", data);
   }
 
@@ -35,7 +36,7 @@ class Request {
     if (params == null) {
       params = {};
     }
-    var data = new Map.from(params)..addAll({"_method": "DELETE"});
+    var data = new HashMap.from(params)..addAll({"_method": "DELETE"});
     return _request(uri, "DELETE", data);
   }
 

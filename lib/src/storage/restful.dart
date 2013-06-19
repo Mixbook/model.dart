@@ -8,24 +8,24 @@ part of model.storage;
 //    pagination
 //  * add class-level (factory-level?) caching of retrieved objects
 
-class RestfulStorage<E> implements AsyncStorage<E> {
+class RestfulStorage implements AsyncStorage<Model> {
   Request request;
   String resourceName;
   String resourceCollectionName;
 
   RestfulStorage(this.request, this.resourceName, this.resourceCollectionName);
 
-  Future<E> find(int id, [Params params]) {
+  Future<Model> find(int id, [Params params]) {
     var future = request.get(_buildUri("member", id), params);
     return future.then((response) => response["data"]);
   }
 
-  Future<List<E>> findAll([Params params]) {
+  Future<List<Model>> findAll([Params params]) {
     var future = request.get(_buildUri("collection"), params);
     return future.then((response) => response["data"]);
   }
 
-  Future<Params> save(E object) {
+  Future<Params> save(Model object) {
     var future;
     if (object.isNewRecord) {
       future = request.post(_buildUri("collection"), _prepareParams(object));
@@ -35,12 +35,12 @@ class RestfulStorage<E> implements AsyncStorage<E> {
     return future.then((response) => response["data"]);
   }
 
-  Future<Params> delete(E object) {
+  Future<Params> delete(Model object) {
     var future = request.delete(_buildUri("member", object.id));
     return future.then((response) => response["data"]);
   }
 
-  Params _prepareParams(E object, [String type]) {
+  Params _prepareParams(Model object, [String type]) {
     var params = object.toParams(type);
     var id = params.remove("id");
     var result = {};
