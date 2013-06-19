@@ -1,0 +1,25 @@
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+out/
+
+# Dart files and fodlers
+packages
+*.dart.js
+*.js.deps
+*.js.map
+
+# Other files and folders
+.settings/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+.idea/
+html-template/
+.bundle
+vendor/
+
+# Dart Editor files
+.buildlog

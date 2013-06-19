@@ -1,0 +1,6 @@
+name: model
+description: "Simple persistance layer, 'Model'"
+dependencies:
+  browser: any
+  async: any
+  unittest: any
