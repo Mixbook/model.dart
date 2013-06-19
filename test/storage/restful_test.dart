@@ -25,9 +25,7 @@ void restfulStorageTest() {
 
     setUp(() {
       requestMock = new RequestMock();
-      storage = new RestfulStorage<RestfulStorageObject>(requestMock, "project", "projects", (Params params) {
-        return new RestfulStorageObject(params);
-      });
+      storage = new RestfulStorage<RestfulStorageObject>(requestMock, "project", "projects");
     });
 
     test("find an object", () {

@@ -1,9 +1,9 @@
-library model.model_factory;
+library model.model_connector;
 
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 
-abstract class ModelFactory<M> {
+abstract class ModelConnector<M> {
   Storage storage;
   Request request;
 

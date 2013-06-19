@@ -3,29 +3,29 @@ library model.model_association;
 import 'dart:async';
 import 'package:model/src/params.dart';
 import 'package:model/src/model.dart';
-import 'package:model/src/model_factory.dart';
+import 'package:model/src/model_connector.dart';
 import 'dart:collection';
 
 abstract class ModelAssociation<E> extends ListBase<E> {
   final Model parent;
   List<E> items = [];
-  ModelFactory _fact;
+  ModelConnector _connector;
 
   ModelAssociation(this.parent, List<Params> paramsList) {
     paramsList.forEach((params) {
-      items.add(fact.buildModel(params));
+      items.add(connector.buildModel(params));
     });
   }
 
-  ModelFactory get fact {
-    if (_fact == null) {
-      _fact = buildFactory();
+  ModelConnector get connector {
+    if (_connector == null) {
+      _connector = buildConnector();
     }
-    return _fact;
+    return _connector;
   }
 
   E find(int id) {
-    return fact.find(id);
+    return connector.find(id);
   }
 
   Future<List<E>> load() {
@@ -37,7 +37,7 @@ abstract class ModelAssociation<E> extends ListBase<E> {
     load().then((_) => items.forEach(f));
   }
 
-  ModelFactory buildFactory();
+  ModelConnector buildConnector();
 
   // List extension methods - START
   int get length => items.length;

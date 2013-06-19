@@ -9,20 +9,11 @@ part of model.storage;
 //  * add class-level (factory-level?) caching of retrieved objects
 
 class RestfulStorage<E> implements AsyncStorage<E> {
-  Function instantiator;
   Request request;
   String resourceName;
   String resourceCollectionName;
 
-  RestfulStorage(
-      Request request, String resourceName, String resourceCollectionName,
-      E instantiator(Params params)
-  ) {
-    this.request = request;
-    this.resourceName = resourceName;
-    this.resourceCollectionName = resourceCollectionName;
-    this.instantiator = instantiator;
-  }
+  RestfulStorage(this.request, this.resourceName, this.resourceCollectionName);
 
   Future<E> find(int id, [Params params]) {
     var future = request.get(_buildUri("member", id), params);
