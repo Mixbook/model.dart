@@ -1,14 +1,14 @@
 part of model.storage;
 
-class LocalStorage<E> implements SyncStorage<E> {
+class LocalStorage implements SyncStorage<Model> {
   html.Storage get storage => html.window.localStorage;
   Function instantiator;
 
-  LocalStorage(E instantiator(Params params)) {
+  LocalStorage(Model instantiator(Params params)) {
     this.instantiator = instantiator;
   }
 
-  E find(String identifier) {
+  Model find(String identifier) {
     var jsonString = storage[identifier];
     if (jsonString != null) {
       return instantiator(json.parse(jsonString));
@@ -17,12 +17,12 @@ class LocalStorage<E> implements SyncStorage<E> {
     }
   }
 
-  bool save(E object) {
-    storage[object.identifier] = json.stringify(object.toParams());
+  bool save(Model object) {
+    storage[object.id.toString()] = json.stringify(object.toParams());
     return true;
   }
 
-  bool delete(E object) {
-    return storage.remove(object.identifier) != null;
+  bool delete(Model object) {
+    return storage.remove(object.id.toString()) != null;
   }
 }

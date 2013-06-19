@@ -18,11 +18,11 @@ class LocalStorageMock {
 
 void localStorageTest() {
   group("Local Storage tests:", () {
-    LocalStorage<LocalStorageMock> storage;
+    LocalStorage storage;
 
     setUp(() {
       html.window.localStorage.clear();
-      storage = new LocalStorage<LocalStorageMock>((Params params) {
+      storage = new LocalStorage((Params params) {
         return new LocalStorageMock.fromParams(params);
       });
     });

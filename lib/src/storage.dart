@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/changeable_uri.dart';
+import 'package:model/src/model.dart';
 
 part 'storage/local.dart';
 part 'storage/restful.dart';
@@ -14,7 +15,7 @@ abstract class Storage<E> {
 }
 
 abstract class SyncStorage<E> extends Storage<E> {
-  E find(Params params);
+  E find(String identifier);
   bool save(E object);
   bool delete(E object);
 }

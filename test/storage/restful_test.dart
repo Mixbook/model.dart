@@ -20,12 +20,12 @@ class RequestMock extends Mock implements Request {}
 
 void restfulStorageTest() {
   group("Restful Storage tests:", () {
-    RestfulStorage<RestfulStorageObject> storage;
+    RestfulStorage storage;
     RequestMock requestMock;
 
     setUp(() {
       requestMock = new RequestMock();
-      storage = new RestfulStorage<RestfulStorageObject>(requestMock, "project", "projects");
+      storage = new RestfulStorage(requestMock, "project", "projects");
     });
 
     test("find an object", () {

@@ -1,7 +1,7 @@
 library model;
 
 export 'src/changeable_uri.dart';
-export 'src/map_dirty.dart';
+export 'src/hash_map_dirty.dart';
 export 'src/model.dart';
 export 'src/model_connector.dart';
 export 'src/model_association.dart';
