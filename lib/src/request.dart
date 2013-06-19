@@ -13,8 +13,15 @@ class Request {
   int _port;
   String _scheme;
   String _pathPrefix;
+  HttpRequest _xhr;
 
-  Request(this._host, this._port, this._scheme, this._pathPrefix);
+  Request(this._host, this._port, this._scheme, this._pathPrefix, [HttpRequest xhr]) {
+    if (xhr == null) {
+      _xhr = new HttpRequest();
+    } else {
+      _xhr = xhr;
+    }
+  }
 
   Future<Params> get(ChangeableUri uri, [Params params]) {
     if (params != null) {
@@ -52,28 +59,27 @@ class Request {
     _adjustUri(uri);
     var jsonData = sendData != null ? json.stringify(sendData) : null;
 
-    var xhr = new HttpRequestMaybeMock();
     var completer = new Completer();
-    xhr.open(method, uri.toString());
-    xhr.setRequestHeader("Content-Type", "application/json");
+    _xhr.open(method, uri.toString());
+    _xhr.setRequestHeader("Content-Type", "application/json");
     // TODO: Need to add checking for response["errors"] and sending it into completer
-    xhr.onLoad.listen((e) {
-      if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 0 || xhr.status == 304) {
-         completer.complete(xhr);
+    _xhr.onLoad.listen((e) {
+      if ((_xhr.status >= 200 && _xhr.status < 300) || _xhr.status == 0 || _xhr.status == 304) {
+         completer.complete(_xhr);
       } else {
          completer.completeError(e);
       }
     });
-    xhr.onError.listen((e) {
+    _xhr.onError.listen((e) {
       completer.completeError(e);
     });
     if (jsonData != null) {
-      xhr.send(jsonData);
+      _xhr.send(jsonData);
     } else {
-      xhr.send();
+      _xhr.send();
     }
 
-    return completer.future.then((xhr) => json.parse(xhr.response));
+    return completer.future.then((_xhr) => json.parse(_xhr.response));
   }
 
   Params _getNotNullParams(params) {

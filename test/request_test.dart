@@ -5,8 +5,7 @@ void requestTest() {
     Request request;
 
     setUp(() {
-      HttpRequestMaybeMock.useMock = true;
-      request = new Request("some-host", 1234, "http", "/path/to");
+      request = new Request("some-host", 1234, "http", "/path/to", new HttpRequestMock());
     });
 
     test("make a get request", () {

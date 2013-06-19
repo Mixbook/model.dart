@@ -1,18 +1,6 @@
 import 'dart:html';
 import 'dart:json' as json;
 
-class HttpRequestMaybeMock {
-  static var useMock = false;
-
-  factory HttpRequestMaybeMock() {
-    if (HttpRequestMaybeMock.useMock) {
-      return new HttpRequestMock();
-    } else {
-      return new HttpRequest();
-    }
-  }
-}
-
 class HttpRequestMock {
   String method;
   String uri;
