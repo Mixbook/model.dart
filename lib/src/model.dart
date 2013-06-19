@@ -1,27 +1,28 @@
 library model.model;
 
 import 'dart:async';
+import 'dart:collection';
 import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
-import 'package:model/src/map_dirty.dart';
+import 'package:model/src/hash_map_dirty.dart';
 
 abstract class Model {
-  MapDirty attributes;
+  HashMapDirty attributes;
   bool isLoaded = false;
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => attributes["id"] == null ? null : int.parse(attributes["id"].toString());
 
   bool _isLoading = false;
-  Future<Model> _loadFuture;
-  Storage _storage;
+  Future<bool> _loadFuture;
+  AsyncStorage _storage;
   Timer _autosaveTimer;
 
   Model(Storage storage, [Params params]) {
     this._storage = storage;
     if (params != null) {
-      attributes = new MapDirty.from(params);
+      attributes = new HashMapDirty(params);
     }
     if (_isParamsForLoaded(params)) {
       isLoaded = true;
@@ -46,7 +47,7 @@ abstract class Model {
 
   Future<bool> save() {
     return _storage.save(this).then((params) {
-      attributes = new MapDirty.from(params);
+      attributes = new HashMapDirty(params);
       return params["errors"] == null || params["errors"].isEmpty;
     });
   }
@@ -74,20 +75,20 @@ abstract class Model {
 
   Params toParams([String type]) {
     if (type == "update") {
-      return {"id": attributes["id"]}..addAll(attributes.summaryChanges);
+      return ({"id": attributes["id"]} as HashMap)..addAll(attributes.summaryChanges);
     } else {
       return new Map.from(attributes);
     }
   }
 
-  void _isParamsForLoaded(Params params) {
+  bool _isParamsForLoaded(Params params) {
     return !(params.length == 1 && params.keys.toList()[0] == "id");
   }
 
   void _autosave(Duration duration) {
     if (isAutosaveEnabled) {
       _autosaveTimer = new Timer(duration, () {
-        save().then(() => _autosave(duration));
+        save().then((_) => _autosave(duration));
       });
     }
   }

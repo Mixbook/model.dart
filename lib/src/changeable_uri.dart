@@ -45,7 +45,7 @@ class ChangeableUri {
         var value = keyValueArray[1];
         if (key.contains("[]")) {
           queryParameters[key] = queryParameters[key] == null ? queryParameters[key] : [];
-          queryParameters[key].add(value);
+          (queryParameters[key] as List).add(value);
         } else {
           queryParameters[key] = value;
         }

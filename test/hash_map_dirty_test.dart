@@ -1,10 +1,10 @@
 part of model_tests;
 
-void mapDirtyTest() {
+void hashMapDirtyTest() {
   group("MapDirty tests:", () {
-    MapDirty map;
+    HashMapDirty map;
     setUp(() {
-      map = new MapDirty.from({"a": 1, "b": "c", "d": [1,2,3]});
+      map = new HashMapDirty({"a": 1, "b": "c", "d": [1,2,3]});
     });
 
     test("change a value", () {

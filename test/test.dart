@@ -13,13 +13,13 @@ import 'package:model/src/http_request_mock.dart';
 part 'storage/local_test.dart';
 part 'storage/restful_test.dart';
 part 'request_test.dart';
-part 'map_dirty_test.dart';
+part 'hash_map_dirty_test.dart';
 
 void main() {
-  localStorageTest();
+  //localStorageTest();
   restfulStorageTest();
   requestTest();
-  mapDirtyTest();
+  hashMapDirtyTest();
   // TODO: Model's tests
   // TODO: Model's factory tests
   // TODO: Model's association tests
