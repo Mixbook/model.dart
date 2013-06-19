@@ -16,28 +16,38 @@ class RestfulStorage implements AsyncStorage<Model> {
   RestfulStorage(this.request, this.resourceName, this.resourceCollectionName);
 
   Future<Params> find(int id, [Params params]) {
-    var future = request.get(_buildUri("member", id), params);
+    var future = request.get(buildUri("member", id), params);
     return future.then((response) => response["data"]);
   }
 
   Future<List<Params>> findAll([Params params]) {
-    var future = request.get(_buildUri("collection"), params);
+    var future = request.get(buildUri("collection"), params);
     return future.then((response) => response["data"]);
   }
 
   Future<Params> save(Model object) {
     var future;
     if (object.isNewRecord) {
-      future = request.post(_buildUri("collection"), _prepareParams(object));
+      future = request.post(buildUri("collection"), _prepareParams(object));
     } else {
-      future = request.put(_buildUri("member", object.id), _prepareParams(object, "member"));
+      future = request.put(buildUri("member", object.id), _prepareParams(object, "member"));
     }
     return future.then((response) => response["data"]);
   }
 
   Future<Params> delete(Model object) {
-    var future = request.delete(_buildUri("member", object.id));
+    var future = request.delete(buildUri("member", object.id));
     return future.then((response) => response["data"]);
+  }
+
+  ChangeableUri buildUri(String type, [int id]) {
+    var path;
+    if (type.toLowerCase() == "collection") {
+      path = _uriPrefix;
+    } else {
+      path = "${_uriPrefix}${id == null ? '' : "/$id"}";
+    }
+    return new ChangeableUri.fromUri(new Uri(path: path));
   }
 
   Params _prepareParams(Model object, [String type]) {
@@ -49,16 +59,6 @@ class RestfulStorage implements AsyncStorage<Model> {
     }
     result[resourceName] = params;
     return result;
-  }
-
-  ChangeableUri _buildUri(String type, [int id]) {
-    var path;
-    if (type.toLowerCase() == "collection") {
-      path = _uriPrefix;
-    } else {
-      path = "${_uriPrefix}${id == null ? '' : "/$id"}";
-    }
-    return new ChangeableUri.fromUri(new Uri(path: path));
   }
 
   String get _uriPrefix => "/${resourceCollectionName}";
