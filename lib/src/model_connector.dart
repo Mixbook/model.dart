@@ -6,17 +6,17 @@ import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 
-abstract class ModelConnector {
+abstract class ModelConnector<E> {
   AsyncStorage storage;
   Request request;
 
-  Future<Model> find(int id) {
+  Future<E> find(int id) {
     return storage.find(id).then(buildModel);
   }
 
-  Future<List<Model>> findAll([Params params]) {
+  Future<List<E>> findAll([Params params]) {
     return storage.findAll(params).then((paramsList) => paramsList.map(buildModel));
   }
 
-  Model buildModel(Params params);
+  E buildModel(Params params);
 }
