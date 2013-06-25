@@ -4,7 +4,7 @@ void hashMapDirtyTest() {
   group("MapDirty tests:", () {
     HashMapDirty map;
     setUp(() {
-      map = new HashMapDirty({"a": 1, "b": "c", "d": [1,2,3]});
+      map = new HashMapDirty.from({"a": 1, "b": "c", "d": [1,2,3]});
     });
 
     test("change a value", () {
