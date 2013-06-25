@@ -33,8 +33,8 @@ abstract class ModelAssociation<E> extends ListBase<E> {
     return Future.wait(futures).then((results) => !results.any((e) => !e));
   }
 
-  void forEach(void f(E element)) {
-    load().then((_) => _items.forEach(f));
+  Future forEach(void f(E element)) {
+    return load().then((_) => _items.forEach(f));
   }
 
   ModelConnector buildConnector();
