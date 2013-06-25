@@ -8,7 +8,7 @@ import 'package:model/src/storage.dart';
 import 'package:model/src/hash_map_dirty.dart';
 
 abstract class Model {
-  HashMapDirty attributes;
+  HashMapDirty attributes = new HashMapDirty();
   bool isLoaded = false;
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
@@ -21,15 +21,17 @@ abstract class Model {
 
   Model(Storage storage, [Params params]) {
     this._storage = storage;
+    
     if (params != null) {
-      attributes = new HashMapDirty(params);
+      attributes = new HashMapDirty.from(params);
     }
+    
     if (_isParamsForLoaded(params)) {
       isLoaded = true;
       _loadFuture = new Future<bool>(() => true);
     } else {
       isLoaded = false;
-    };
+    }
   }
 
   Future<bool> load() {
@@ -47,7 +49,7 @@ abstract class Model {
 
   Future<bool> save() {
     return _storage.save(this).then((params) {
-      attributes = new HashMapDirty(params);
+      attributes = new HashMapDirty.from(params);
       return params["errors"] == null || params["errors"].isEmpty;
     });
   }
