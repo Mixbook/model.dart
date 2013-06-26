@@ -41,8 +41,12 @@ abstract class ModelAssociation<E> extends ListBase<E> {
 
   // List extension methods - START
   int get length => _items.length;
-  void set length(int length) => _items.length = length;
-  void operator[]=(int index, E value) => _items[index] = value;
+  set length(int length) => _items.length = length;
+  
+  void operator []=(int index, E value) {
+    _items[index] = value;
+  }
+  
   E operator [](int index) => _items[index];
   // List extension methods - END
 }

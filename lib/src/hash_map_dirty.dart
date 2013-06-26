@@ -3,9 +3,11 @@ library model.hash_map_dirty;
 import 'dart:collection';
 
 class HashMapDirty<K, V> extends HashMap<K, V> {
-  HashMap<K, V> _original;
+  HashMap<K, V> _original = new HashMap<K, V>();
 
-  HashMapDirty(Map<K, V> other) {
+  HashMapDirty();
+  
+  HashMapDirty.from(Map<K, V> other) {
     addAll(other);
     _original = new HashMap.from(this);
   }
