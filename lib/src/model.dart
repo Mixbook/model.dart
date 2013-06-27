@@ -6,26 +6,26 @@ import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 import 'package:model/src/hash_map_dirty.dart';
+import 'package:model/src/changeable_uri.dart';
 
 abstract class Model {
   HashMapDirty attributes = new HashMapDirty();
   bool isLoaded = false;
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
-  int get id => attributes["id"] == null ? null : int.parse(attributes["id"].toString());
+  int get id => getIntValue(attributes["id"]);
 
   bool _isLoading = false;
   Future<bool> _loadFuture;
-  AsyncStorage _storage;
+  AsyncStorage storage;
   Timer _autosaveTimer;
 
   Model(Storage storage, [Params params]) {
-    this._storage = storage;
-    
+    this.storage = storage;
     if (params != null) {
       attributes = new HashMapDirty.from(params);
     }
-    
+
     if (_isParamsForLoaded(params)) {
       isLoaded = true;
       _loadFuture = new Future<bool>(() => true);
@@ -34,10 +34,13 @@ abstract class Model {
     }
   }
 
+  ChangeableUri get memberUri => storage.request.adjustUri(storage.buildUri("member", id));
+  ChangeableUri get collectionUri => storage.request.adjustUri(storage.buildUri("collection"));
+
   Future<bool> load() {
     if (!isLoaded && !_isLoading) {
       _isLoading = true;
-      _loadFuture = _storage.find(attributes["id"]).then((params) {
+      _loadFuture = storage.find(id).then((params) {
         attributes.addAll(params);
         isLoaded = true;
         _isLoading = false;
@@ -48,14 +51,14 @@ abstract class Model {
   }
 
   Future<bool> save() {
-    return _storage.save(this).then((params) {
+    return storage.save(this).then((params) {
       attributes = new HashMapDirty.from(params);
       return params["errors"] == null || params["errors"].isEmpty;
     });
   }
 
   Future<bool> delete() {
-    return _storage.delete(this).then((params) {
+    return storage.delete(this).then((params) {
       return params["errors"] == null || params["errors"].isEmpty;
     });
   }
@@ -77,10 +80,14 @@ abstract class Model {
 
   Params toParams([String type]) {
     if (type == "update") {
-      return ({"id": attributes["id"]} as HashMap)..addAll(attributes.summaryChanges);
+      return ({"id": id} as HashMap)..addAll(attributes.summaryChanges);
     } else {
       return new Map.from(attributes);
     }
+  }
+
+  int getIntValue(string) {
+    return string == null ? null : int.parse(string.toString());
   }
 
   bool _isParamsForLoaded(Params params) {

@@ -39,16 +39,17 @@ class Request {
     return _request(uri, "DELETE", data, xhr);
   }
 
-
-  void _adjustUri(uri) {
+  ChangeableUri adjustUri(uri) {
     uri.host = _host;
     uri.port = _port;
     uri.scheme = _scheme;
     uri.path = _pathPrefix.replaceFirst(new RegExp(r'^/'), "") + uri.path;
+    return uri;
   }
 
+
   Future<Params> _request(ChangeableUri uri, String method, [Params sendData, HttpRequest xhr]) {
-    _adjustUri(uri);
+    adjustUri(uri);
     var jsonData = sendData != null ? json.stringify(sendData) : null;
 
     var completer = new Completer();
