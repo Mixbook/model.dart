@@ -33,7 +33,7 @@ class ChangeableUri {
   Uri toUri() {
     return new Uri(
         scheme: scheme, host: host, port: port,
-        path: path, queryParameters: queryParameters);
+        path: path, queryParameters: (queryParameters as Map<String, String>));
   }
   String toString() => toUri().toString();
 
