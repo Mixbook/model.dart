@@ -24,7 +24,7 @@ abstract class ModelAssociation<E> extends ListBase<E> {
     return _connector;
   }
 
-  E find(int id) {
+  Future<E> find(int id) {
     return connector.find(id);
   }
 

@@ -59,7 +59,9 @@ class Request {
     }
 
     xhr.open(method, uri.toString());
-    xhr.setRequestHeader("Content-Type", "application/json");
+    if (method != "GET") {
+      xhr.setRequestHeader("Content-Type", "application/json");
+    }
     // TODO: Need to add checking for response["errors"] and sending it into completer
     xhr.onLoad.listen((e) {
       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 0 || xhr.status == 304) {
