@@ -94,6 +94,18 @@ abstract class Model {
     return !(params.length == 1 && params.keys.toList()[0] == "id");
   }
 
+  int get hashCode {
+    return id != null ? id.hashCode + runtimeType.hashCode : super.hashCode;
+  }
+
+  bool operator == (Model other) {
+    if (id != null && other != null) {
+      return id == other.id && runtimeType == other.runtimeType;
+    } else {
+      return super == other;
+    }
+  }
+
   void _autosave(Duration duration) {
     if (isAutosaveEnabled) {
       _autosaveTimer = new Timer(duration, () {
