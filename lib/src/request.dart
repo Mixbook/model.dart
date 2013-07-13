@@ -5,7 +5,7 @@ import 'dart:html';
 import 'dart:async';
 import 'dart:collection';
 import 'package:model/src/params.dart';
-import 'package:model/src/changeable_uri.dart';
+import 'package:model/src/mutable_uri.dart';
 
 class Request {
   String _host;
@@ -15,23 +15,23 @@ class Request {
 
   Request(this._host, this._port, this._scheme, this._pathPrefix);
 
-  Future<Params> get(ChangeableUri uri, [Params params, HttpRequest xhr]) {
+  Future<Params> get(MutableUri uri, [Params params, HttpRequest xhr]) {
     if (params != null) {
       uri.addParameters(_getNotNullParams(params));
     }
     return _request(uri, "GET", null, xhr);
   }
 
-  Future<Params> post(ChangeableUri uri, Params params, [HttpRequest xhr]) {
+  Future<Params> post(MutableUri uri, Params params, [HttpRequest xhr]) {
     return _request(uri, "POST", new Map.from(params), xhr);
   }
 
-  Future<Params> put(ChangeableUri uri, Params params, [HttpRequest xhr]) {
+  Future<Params> put(MutableUri uri, Params params, [HttpRequest xhr]) {
     var data = new HashMap.from(params)..addAll({"_method": "PUT"});
     return _request(uri, "PUT", data, xhr);
   }
 
-  Future<Params> delete(ChangeableUri uri, [Params params, HttpRequest xhr]) {
+  Future<Params> delete(MutableUri uri, [Params params, HttpRequest xhr]) {
     if (params == null) {
       params = {};
     }
@@ -39,7 +39,7 @@ class Request {
     return _request(uri, "DELETE", data, xhr);
   }
 
-  ChangeableUri adjustUri(uri) {
+  MutableUri adjustUri(uri) {
     uri.host = _host;
     uri.port = _port;
     uri.scheme = _scheme;
@@ -48,7 +48,7 @@ class Request {
   }
 
 
-  Future<Params> _request(ChangeableUri uri, String method, [Params sendData, HttpRequest xhr]) {
+  Future<Params> _request(MutableUri uri, String method, [Params sendData, HttpRequest xhr]) {
     adjustUri(uri);
     var jsonData = sendData != null ? json.stringify(sendData) : null;
 

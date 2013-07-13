@@ -1,9 +1,8 @@
-library model.changeable_uri;
+library model.mutable_uri;
 
 import 'package:model/src/params.dart';
 
-// TODO: A little weird name... Try to think of something better?
-class ChangeableUri {
+class MutableUri implements Uri {
   String host;
   int port;
   String path;
@@ -12,7 +11,7 @@ class ChangeableUri {
 
   final int hashCode;
 
-  ChangeableUri.fromUri(Uri uri) :
+  MutableUri.fromUri(Uri uri) :
       hashCode = uri.hashCode
   {
     host = uri.host;
@@ -22,12 +21,12 @@ class ChangeableUri {
     queryParameters = new Map.from(uri.queryParameters);
   }
 
-  bool operator ==(ChangeableUri other) {
+  bool operator ==(MutableUri other) {
     return hashCode == other.hashCode;
   }
 
-  factory ChangeableUri.fromString(String input) {
-    return new ChangeableUri.fromUri(Uri.parse(input));
+  factory MutableUri.fromString(String input) {
+    return new MutableUri.fromUri(Uri.parse(input));
   }
 
   Uri toUri() {
@@ -63,4 +62,17 @@ class ChangeableUri {
   void removeParameters(List<String> keys) {
     keys.forEach((k) => queryParameters.remove(k));
   }
+
+  /* Delegating to Uri to provide its interface */
+
+  List<String> get pathSegments => toUri().pathSegments;
+  Uri resolve(String uri) => toUri().resolve(uri);
+  String get userInfo => toUri().userInfo;
+  String get query => toUri().query;
+  String get authority => toUri().authority;
+  String get origin => toUri().origin;
+  String get fragment => toUri().origin;
+  Uri resolveUri(Uri reference) => toUri().resolveUri(reference);
+  bool get hasAuthority => toUri().hasAuthority;
+  bool get isAbsolute => toUri().scheme;
 }

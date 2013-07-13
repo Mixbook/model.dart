@@ -42,14 +42,14 @@ class RestfulStorage implements AsyncStorage<Model> {
     return future.then((response) => response["data"]);
   }
 
-  ChangeableUri buildUri(String type, [int id]) {
+  MutableUri buildUri(String type, [int id]) {
     var path;
     if (type.toLowerCase() == "collection") {
       path = _uriPrefix;
     } else {
       path = "${_uriPrefix}${id == null ? '' : "/$id"}";
     }
-    return new ChangeableUri.fromUri(new Uri(path: path));
+    return new MutableUri.fromUri(new Uri(path: path));
   }
 
   Params _prepareParams(Model object, [String type]) {
