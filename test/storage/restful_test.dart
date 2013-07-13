@@ -29,7 +29,7 @@ void restfulStorageTest() {
     });
 
     test("find an object", () {
-      var uri = new ChangeableUri.fromString("/projects/123");
+      var uri = new MutableUri.fromString("/projects/123");
       requestMock.when(callsTo('get', uri, null)).alwaysReturn(new Future(() {
         return {"data": {"id": "123", "name": "Big one"}};
       }));
@@ -40,7 +40,7 @@ void restfulStorageTest() {
     });
 
     test("retrieve a collection", () {
-      var uri = new ChangeableUri.fromString("/projects");
+      var uri = new MutableUri.fromString("/projects");
       requestMock.when(callsTo('get', uri, null)).alwaysReturn(new Future(() {
         return {"data": [{"id": "1", "name": "One"}, {"id": "2", "name": "Two"}]};
       }));
@@ -53,7 +53,7 @@ void restfulStorageTest() {
     });
 
     test("create an object", () {
-      var uri = new ChangeableUri.fromString("/projects");
+      var uri = new MutableUri.fromString("/projects");
       requestMock.
           when(callsTo('post', uri, {"project": {"name": "Bla", "type": "create"}})).
           alwaysReturn(new Future(() => {"data": {"name": "New name"}, "errors": []}));
@@ -64,7 +64,7 @@ void restfulStorageTest() {
     });
 
     test("update an object", () {
-      var uri = new ChangeableUri.fromString("/projects/123");
+      var uri = new MutableUri.fromString("/projects/123");
       requestMock.
           when(callsTo('put', uri, {"project": {"name": "Bla", "type": "update"}})).
           alwaysReturn(new Future(() => {"data": {"name": "New name"}, "errors": []}));
@@ -75,7 +75,7 @@ void restfulStorageTest() {
     });
 
     test("delete an object", () {
-      var uri = new ChangeableUri.fromString("/projects/123");
+      var uri = new MutableUri.fromString("/projects/123");
       requestMock.
           when(callsTo('delete', uri)).
           alwaysReturn(new Future(() => {"data": {}, "errors": []}));
