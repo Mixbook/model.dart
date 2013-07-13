@@ -14,6 +14,7 @@ abstract class Model {
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => getIntValue(attributes["id"]);
+  Params errors;
 
   bool _isLoading = false;
   Future<bool> _loadFuture;
@@ -51,10 +52,15 @@ abstract class Model {
   }
 
   Future<bool> save() {
-    return storage.save(this).then((params) {
-      attributes = new HashMapDirty.from(params);
-      return params["errors"] == null || params["errors"].isEmpty;
-    });
+    return storage.save(this)
+        .then((params) {
+          attributes = new HashMapDirty.from(params);
+          return true;
+        })
+        .catchError((errors) {
+          this.errors = errors;
+          return false;
+        });
   }
 
   Future<bool> delete() {

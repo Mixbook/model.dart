@@ -65,9 +65,9 @@ class Request {
     // TODO: Need to add checking for response["errors"] and sending it into completer
     xhr.onLoad.listen((e) {
       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 0 || xhr.status == 304) {
-         completer.complete(xhr);
+        completer.complete(xhr);
       } else {
-         completer.completeError(e);
+        completer.completeError(xhr);
       }
     });
     xhr.onError.listen((e) {
@@ -79,7 +79,9 @@ class Request {
       xhr.send();
     }
 
-    return completer.future.then((xhr) => json.parse(xhr.response));
+    return completer.future
+        .then((xhr) => json.parse(xhr.response))
+        .catchError((xhr) => throw json.parse(xhr.response));
   }
 
   Params _getNotNullParams(params) {

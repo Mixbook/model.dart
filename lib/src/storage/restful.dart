@@ -32,7 +32,9 @@ class RestfulStorage implements AsyncStorage<Model> {
     } else {
       future = request.put(buildUri("member", object.id), _prepareParams(object, "member"));
     }
-    return future.then((response) => response["data"]);
+    return future
+        .then((response) => response["data"])
+        .catchError((response) => throw response['error']);
   }
 
   Future<Params> delete(Model object) {
