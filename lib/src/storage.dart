@@ -5,7 +5,7 @@ import 'dart:json' as json;
 import 'dart:async';
 import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
-import 'package:model/src/changeable_uri.dart';
+import 'package:model/src/mutable_uri.dart';
 import 'package:model/src/model.dart';
 
 part 'storage/local.dart';
@@ -26,5 +26,5 @@ abstract class AsyncStorage<E> extends Storage<E> {
   Future<List<Params>> findAll([Params params]);
   Future<Params> save(E object);
   Future<Params> delete(E object);
-  ChangeableUri buildUri(String type, [int id]);
+  MutableUri buildUri(String type, [int id]);
 }

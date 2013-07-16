@@ -6,7 +6,7 @@ import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 import 'package:model/src/hash_map_dirty.dart';
-import 'package:model/src/changeable_uri.dart';
+import 'package:model/src/mutable_uri.dart';
 
 abstract class Model {
   HashMapDirty attributes = new HashMapDirty();
@@ -14,6 +14,7 @@ abstract class Model {
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => getIntValue(attributes["id"]);
+  Params errors;
 
   bool _isLoading = false;
   Future<bool> _loadFuture;
@@ -34,8 +35,8 @@ abstract class Model {
     }
   }
 
-  ChangeableUri get memberUri => storage.request.adjustUri(storage.buildUri("member", id));
-  ChangeableUri get collectionUri => storage.request.adjustUri(storage.buildUri("collection"));
+  MutableUri get memberUri => storage.request.adjustUri(storage.buildUri("member", id));
+  MutableUri get collectionUri => storage.request.adjustUri(storage.buildUri("collection"));
 
   Future<bool> load() {
     if (!isLoaded && !_isLoading) {
@@ -51,10 +52,15 @@ abstract class Model {
   }
 
   Future<bool> save() {
-    return storage.save(this).then((params) {
-      attributes = new HashMapDirty.from(params);
-      return params["errors"] == null || params["errors"].isEmpty;
-    });
+    return storage.save(this)
+        .then((params) {
+          attributes = new HashMapDirty.from(params);
+          return true;
+        })
+        .catchError((errors) {
+          this.errors = errors;
+          return false;
+        });
   }
 
   Future<bool> delete() {
