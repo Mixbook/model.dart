@@ -4,7 +4,7 @@ class LocalStorage implements SyncStorage<Model> {
   html.Storage get storage => html.window.localStorage;
   Function instantiator;
 
-  LocalStorage(Model instantiator(Params params)) {
+  LocalStorage(Model instantiator(Map<String, Object> params)) {
     this.instantiator = instantiator;
   }
 

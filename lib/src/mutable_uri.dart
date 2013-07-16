@@ -1,13 +1,11 @@
 library model.mutable_uri;
 
-import 'package:model/src/params.dart';
-
 class MutableUri implements Uri {
   String host;
   int port;
   String path;
   String scheme;
-  Params queryParameters = {};
+  Map<String, Object> queryParameters = {};
 
   final int hashCode;
 
@@ -32,7 +30,7 @@ class MutableUri implements Uri {
   Uri toUri() {
     return new Uri(
         scheme: scheme, host: host, port: port,
-        path: path, queryParameters: (queryParameters as Map<String, String>));
+        path: path, queryParameters: queryParameters);
   }
   String toString() => toUri().toString();
 

@@ -4,7 +4,6 @@ import 'dart:json' as json;
 import 'dart:html';
 import 'dart:async';
 import 'dart:collection';
-import 'package:model/src/params.dart';
 import 'package:model/src/mutable_uri.dart';
 
 class Request {
@@ -15,23 +14,23 @@ class Request {
 
   Request(this._host, this._port, this._scheme, this._pathPrefix);
 
-  Future<Params> get(MutableUri uri, [Params params, HttpRequest xhr]) {
+  Future<Map<String, Object>> get(MutableUri uri, [Map<String, Object> params, HttpRequest xhr]) {
     if (params != null) {
       uri.addParameters(_getNotNullParams(params));
     }
     return _request(uri, "GET", null, xhr);
   }
 
-  Future<Params> post(MutableUri uri, Params params, [HttpRequest xhr]) {
+  Future<Map<String, Object>> post(MutableUri uri, Map<String, Object> params, [HttpRequest xhr]) {
     return _request(uri, "POST", new Map.from(params), xhr);
   }
 
-  Future<Params> put(MutableUri uri, Params params, [HttpRequest xhr]) {
+  Future<Map<String, Object>> put(MutableUri uri, Map<String, Object> params, [HttpRequest xhr]) {
     var data = new HashMap.from(params)..addAll({"_method": "PUT"});
     return _request(uri, "PUT", data, xhr);
   }
 
-  Future<Params> delete(MutableUri uri, [Params params, HttpRequest xhr]) {
+  Future<Map<String, Object>> delete(MutableUri uri, [Map<String, Object> params, HttpRequest xhr]) {
     if (params == null) {
       params = {};
     }
@@ -48,7 +47,7 @@ class Request {
   }
 
 
-  Future<Params> _request(MutableUri uri, String method, [Params sendData, HttpRequest xhr]) {
+  Future<Map<String, Object>> _request(MutableUri uri, String method, [Map<String, Object> sendData, HttpRequest xhr]) {
     adjustUri(uri);
     var jsonData = sendData != null ? json.stringify(sendData) : null;
 
@@ -84,7 +83,7 @@ class Request {
         .catchError((xhr) => throw json.parse(xhr.response));
   }
 
-  Params _getNotNullParams(params) {
+  Map<String, Object> _getNotNullParams(params) {
     var notNullParams = {};
     (params != null ? params : {}).forEach((k, v) {
       if (v != null) {

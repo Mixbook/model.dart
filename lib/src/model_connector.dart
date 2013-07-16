@@ -2,7 +2,6 @@ library model.model_connector;
 
 import 'dart:async';
 import 'package:model/src/model.dart';
-import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 
@@ -14,9 +13,9 @@ abstract class ModelConnector<E> {
     return storage.find(id).then(buildModel);
   }
 
-  Future<List<E>> findAll([Params params]) {
+  Future<List<E>> findAll([Map<String, Object> params]) {
     return storage.findAll(params).then((paramsList) => paramsList.map(buildModel));
   }
 
-  E buildModel(Params params);
+  E buildModel(Map<String, Object> params);
 }

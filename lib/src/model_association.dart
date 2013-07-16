@@ -1,7 +1,6 @@
 library model.model_association;
 
 import 'dart:async';
-import 'package:model/src/params.dart';
 import 'package:model/src/model.dart';
 import 'package:model/src/model_connector.dart';
 import 'dart:collection';
@@ -11,7 +10,7 @@ abstract class ModelAssociation<E> extends ListBase<E> {
   List<E> _items = [];
   ModelConnector _connector;
 
-  ModelAssociation(this.parent, List<Params> paramsList) {
+  ModelAssociation(this.parent, List<Map<String, Object>> paramsList) {
     paramsList.forEach((params) {
       _items.add(connector.buildModel(params));
     });
