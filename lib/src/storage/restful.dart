@@ -15,17 +15,17 @@ class RestfulStorage implements AsyncStorage<Model> {
 
   RestfulStorage(this.request, this.resourceName, this.resourceCollectionName);
 
-  Future<Params> find(int id, [Params params]) {
+  Future<Map<String, Object>> find(int id, [Map<String, Object> params]) {
     var future = request.get(buildUri("member", id), params);
     return future.then((response) => response["data"]);
   }
 
-  Future<List<Params>> findAll([Params params]) {
+  Future<List<Map<String, Object>>> findAll([Map<String, Object> params]) {
     var future = request.get(buildUri("collection"), params);
     return future.then((response) => response["data"]);
   }
 
-  Future<Params> save(Model object) {
+  Future<Map<String, Object>> save(Model object) {
     var future;
     if (object.isNewRecord) {
       future = request.post(buildUri("collection"), _prepareParams(object));
@@ -37,7 +37,7 @@ class RestfulStorage implements AsyncStorage<Model> {
         .catchError((response) => throw response['error']);
   }
 
-  Future<Params> delete(Model object) {
+  Future<Map<String, Object>> delete(Model object) {
     var future = request.delete(buildUri("member", object.id));
     return future.then((response) => response["data"]);
   }
@@ -52,7 +52,7 @@ class RestfulStorage implements AsyncStorage<Model> {
     return new MutableUri.fromUri(new Uri(path: path));
   }
 
-  Params _prepareParams(Model object, [String type]) {
+  Map<String, Object> _prepareParams(Model object, [String type]) {
     var params = object.toParams(type);
     var id = params.remove("id");
     var result = {};

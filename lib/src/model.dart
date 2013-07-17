@@ -2,7 +2,6 @@ library model.model;
 
 import 'dart:async';
 import 'dart:collection';
-import 'package:model/src/params.dart';
 import 'package:model/src/request.dart';
 import 'package:model/src/storage.dart';
 import 'package:model/src/hash_map_dirty.dart';
@@ -14,14 +13,14 @@ abstract class Model {
   bool isAutosaveEnabled = false;
   bool get isNewRecord => id == null;
   int get id => getIntValue(attributes["id"]);
-  Params errors;
+  Map<String, Object> errors;
 
   bool _isLoading = false;
   Future<bool> _loadFuture;
   AsyncStorage storage;
   Timer _autosaveTimer;
 
-  Model(Storage storage, [Params params]) {
+  Model(Storage storage, [Map<String, Object> params]) {
     this.storage = storage;
     if (params != null) {
       attributes = new HashMapDirty.from(params);
@@ -84,7 +83,7 @@ abstract class Model {
     }
   }
 
-  Params toParams([String type]) {
+  Map<String, Object> toParams([String type]) {
     if (type == "update") {
       return ({"id": id} as HashMap)..addAll(attributes.summaryChanges);
     } else {
@@ -96,7 +95,7 @@ abstract class Model {
     return string == null ? null : int.parse(string.toString());
   }
 
-  bool _isParamsForLoaded(Params params) {
+  bool _isParamsForLoaded(Map<String, Object> params) {
     return !(params.length == 1 && params.keys.toList()[0] == "id");
   }
 
